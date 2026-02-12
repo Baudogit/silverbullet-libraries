@@ -5,25 +5,31 @@ files:
 - Instructions_for_Task_Explorer.md
 - taskex_styles.css
 - lucide-icons.svg
-- where-examples.txt
-- where-history.txt
+- where-examples_initial.txt
+- where-history_initial.txt
 pageDecoration.prefix: "📋 "
-maj: 2026-02-11 08-00
+maj: 2026-02-12 12-00
+share.uri: "https://github.com/Baudogit/silverbullet-libraries/blob/main/TaskExplorer.md"
+share.hash: 6e4f80f3
+share.mode: push
 ---
 
 # 📋Task Explorer
 
-Task Explorer **display your task list** with your css rules.
-The content of task is fully visualized **in styled mode** and **in raw mode**.
-You can **extract** a list with custom queries and **filter** it according to many criteria.
+Task Explorer displays your tasks according to your **CSS rules** and in **raw mode**.
+You can **navigate** to the original task page and view it in an independent panel.
 
-The status of a task can be directly **modified** in the list or after **navigating** to its original page. 
-You can **update the attributes** of the tasks in the list with **batch processing** (add, delete and rename).
+The list can be **filtered** and **sorted** with default options or with simple syntax.
+A **query editor** extracts your tasks into a new list according to your criteria.
+
+You can **update** the status of your tasks individually.
+You can update their attributes in **batch processing** (adding, deleting, renaming).
 
 ![TE|400px](https://raw.githubusercontent.com/Baudogit/silverbullet/refs/heads/main/screenshots/TE.png)
-Input actions:
-![actions|500px](https://raw.githubusercontent.com/Baudogit/silverbullet/refs/heads/main/screenshots/actions.png)
-Run the `System: Reload` command then **open Task Explorer** with ${widgets.button("Toggle Task Explorer", function() editor.invokeCommand("Navigate: Toggle Task Explorer", tasksByPage()) end)} Ctrl+Alt+v or
+Actions
+![actions|800px](https://raw.githubusercontent.com/Baudogit/silverbullet/refs/heads/main/screenshots/actions.png)
+
+Run the `System: Reload` command then open Task Explorer with ${widgets.button("Toggle Task Explorer", function() editor.invokeCommand("Navigate: Toggle Task Explorer") end)}, Ctrl+Alt+v or
 the icon “list” button added to your SilverBullet toolbar by this space-lua:
 
 ````space-lua
@@ -40,7 +46,7 @@ actionButton.define {
 
 
 > **warning** Opening Task Explorer
->  It may be necessary to click the button twice. It depends on how the panel was previously closed by Task Explorer or by another plugin. When you **close** Task Explorer please use toggle command, toggle button or the X of Task Explorer (but not the ⯌ of multi-windowing system).
+>  It may be necessary to click the button twice. It depends on how the panel was previously closed by Task Explorer or by another plugin. When you **close** Task Explorer please use toggle command, toggle button or the X of Task Explorer (but not the “⯌“ of multi-windowing system).
 
 ---
 
@@ -53,26 +59,44 @@ actionButton.define {
     - On the following lines, as many as necessary: ==attributes==
     - On a **tooltip**: ==raw text== (without CSS rules), ==reference== and ==itags==
 - Each task is formatted according to the **CSS rules** applied in markdown pages.
-- Navigate to the **original task page** with a click on a line.
-- Open the original page depending on the option selected with a button on the toolbar:
+- Navigate to the **original task page** with a click on a line. Depending on the option selected with a button on the toolbar:
     - in the main editor window
     - or in a separate window, if you have installed multi-windowing system
+- you can **change the status** of a task directly in the list or in its original page
+  
+> **warning** Custom statuses
+>   They are displayed but cannot be updated via Task Explorer. To do this, you must navigate to the original page and update it manually.
 
-## List manipulation
+## Actions
 
-Several buttons on the toolbar allow you to manipulate the list:
+You can filter or reset the list with buttons on the toolbar:
 - ==Page break==: to add it or remove it
 - ==Completed tasks==: to add them or remove them
 - ==Reset==: to extract all the tasks or reexecute the default query (see below Configuration)
   
-But you can do a lot more with the **filter and custom query functions**.
-To activate these features, click in the input box, then choose a button in the menu.
-
+But you can do A LOT MORE with the ==**actions**==. To activate these features, click in the input box.
 The input box is used to define:
-- the text of **filter** witch admits the operators “+“ and “-”, and groups delimited by double or single quotes, or double brackets.
-- or the text of **custom where clause** witch extends the functionality of the "query" plugin by calling directly the `index.queryLuaObjects` function.
 
-Menu provide input **assistance** to complete the input area:
+- a text to **filter** the list
+- or a text to **sort** the list according to the ==value of one or more attributes==
+- or a text to **update** attributes of tasks with ==batch processing== (add, delete, rename)
+- or a text to **query** the index with a ==custom where clause==
+
+> **danger** **Batch processing**
+>   This feature is experimental. It is recommended to use it on a copy of your document space.
+
+> **note** Syntax (short presentation)
+>   Filter: characters or groups delimited by double or single quotes, or double brackets, delimited by spaces or chained by operators “+“ or “-”
+>   Sort: one or more attribute’s name followed by "+" or "-" (asc/desc). Type of values recognized: string, number, date (many formats)
+>   Update: `verb` (add, delete, replace) + “`:`“ + `name of attribute` (value can be provided when adding) and “`->`“ to replace. Spaces are not meaningful.
+>   Query: write your custom where clause (without “where”) with extended LIQ syntax
+
+Please, refer to ==Instructions_for_Task_Explorer.md== (via a button on the toolbar) for detailled **rules** for filtering and designing custom where clauses.
+
+Filter is not preserved when you sort the list. To remove a sort, click one of the toolbar buttons: task done, break page or possibly reset.
+Filter is preserved when you update the attributes. So, you can extract, filter and then, update.
+
+Lists (in the form of menus) provide **assistance** for filling the input box:
 - for both modes: list of ==attributes== collected in the current list
 - for query mode only:
     - list of ==standard properties==
@@ -83,27 +107,9 @@ When you select one of these items, its formatted content is transferred in the 
 The input area accepts direct keyboard entry, copy-paste operation and paste from the menu.     
 To hide the drop-down menus, press **Esc** or click out of the input. To show the menus again **right click** on the input.
 
-> **note** Application
+> **note** Execute action
 >      Filter mode: immediate application (live)
->      Query mode : press **Enter** to execute the query
-
-Please, refer to ==Instructions_for_Task_Explorer.md== (via a button on the toolbar) for detailled **rules** for filtering and designing custom where clauses.
-
-## Update
-
-- ==Change the status== of a task directly in the list or, if you prefer, on the original page after navigating.
-  
-> **warning** Custom statuses
->   They are displayed but cannot be updated via Task Explorer. To do this, you must navigate to the original page and update it manually.
-
-- ==**Batch processing**== to add, delete or rename an attribute on all the tasks in the list.
-
-> **danger** Danger
->   This feature is experimental. It is recommended to use it on a copy of your document space.
-
-Activating this mode (button Update) and executing order is the same as querying (see above). The syntax is simple: a `verb` (add, delete, replace) + “`:`“ + `name of attribute` (value can be provided when adding) and “`->`“ to replace. Spaces are not meaningful. Please refer to the placeholder of the input.
-
-The list can be extracted with custom where clause and filtered, **before** applying the treatment.
+>      Query, sort and update mode : press **Enter** to execute the action
   
 ---
 
@@ -116,16 +122,12 @@ via his library `UnifiedAdvancedPanelControl.js`.
 
 The concept uses two types of iframe:
 - **resizable floating** panels which extend the functionalities of the three fixed panels incorporated into SilverBullet, designated by their position: left= ==lhs== | right= ==rhs== | bottom= ==bhs==).
-- **synthetic** panels, in unlimited numbers, designed on the fly
-
-> **note**  Sessions
->  - Document Explorer and Task Explorer are pieces of html+js+css injected into one of the three panels. They don’t generate a new SilverBullet session.
->  - conversely, when a markdown page is opened in a synthetic panel, a new SilverBullet **session** is created. Each new synthetic panel opened with an md page creates a new session. A synthetic panel is equivalent to a **new tab**. 
+- **synthetic** panels, in unlimited numbers, designed on the fly.
 
 > **warning** Limit
 >   The bhs panel is only partially supported by Mr.Red's library
 
-**Default panel for Task Explorer** is ==rhs==. You can modify it with `config.set` command, like this :
+**Default panel** for Task Explorer is ==rhs==. You can modify it with `config.set` command, like this :
 ```lua
 -- change lua block to space-lua or copy this line in your config.md
 config.set("explorer2", { position = "bhs" })
@@ -139,7 +141,7 @@ config.set("explorer2", { position = "bhs" })
 > **warning** Dark mode
 >      Currently, Task Explorer is not entirely compatible with dark mode
 
-- The **panel style** is managed by `taskex_styles.css`.
+1) The **style of Task Explorer** is essentially managed by `taskex_styles.css`.
    The last section: `11. MAIN UI (Colors)` can be customized in a `space-style` within your space.
 
 A colored gauge is used when Task Explorer execute a query or an update with batch processing:
@@ -150,19 +152,17 @@ html[data-theme="light"] {
 }
 ```
   
-- The **style of tasks** can be finely customized since SilverBullet’s version 2.40. You can apply rules to one or all attributes and/or to all or certain values.
-  
-  Several examples are available here:
-    - https://community.silverbullet.md/t/decorate-attributes-with-emojis/3823/12
-    - https://community.silverbullet.md/t/task-dynamic-styling/3708/14
+2) The **style of tasks** can be finely customized since SilverBullet’s version 2.40. You can apply rules to one or all attributes and/or to all or certain values.
+    Styles defined for tasks apply to ==**both** the original task and its copy in Task Explorer==.
 
 The edge version published 2026-02-04 modify the spans’s classes of the name and the value of an attribute, i.e. respectively:
 - `sb-attribute-name` for the attribute name. This classe replaces `sb-atom`.
 - `sb-attribute-value` for the attribute value. Previously, this span had no class.
-
-Certain of the examples above might be adapted if you uses a version past to 2026-02-04. Task Explorer detect the version in execution and adapt the list after edge version of 2026-02-06 (not 04).
   
-Styles defined for tasks apply to ==**both** the original task and its copy in Task Explorer==.
+Several examples are available here:
+    - https://community.silverbullet.md/t/decorate-attributes-with-emojis/3823/12
+    - https://community.silverbullet.md/t/task-dynamic-styling/3708/14
+Certain of these examples might be adapted if you uses a version past to 2026-02-04. Task Explorer detect the version in execution and adapt the list after edge version of 2026-02-06 (not 04).
 
 ---
 
@@ -170,23 +170,18 @@ Styles defined for tasks apply to ==**both** the original task and its copy in T
 
 ## Installation
 
-1) First, install **Document Explorer** and/or **AdvancedPanelControl** by Mr.Red with Library Manager via his repository:
+1) First, install **Document Explorer** by Mr.Red with Library Manager via his repository:
       https://github.com/Mr-xRed/silverbullet-libraries/blob/main/Repository/Mr-xRed.md
     `UnifiedAdvancedPanelControl.js` is copied in the folder `Library/Mr-xRed/`.
 
+   Note: You can use Task Explorer without `UnifiedAdvancedPanelControl.js` but, in this case, you will not have access to multi-window functionalities.
+
+2) Then, install **Task Explorer**. Use this URI with the command ${widgets.commandButton "Library: Install"}:
+https://github.com/Baudogit/silverbullet-libraries/blob/main/TaskExplorer.md
+All the necessary files are copied in the folder: `Library/baudogit/`.
+
 > **note** Note
->   You can use Task Explorer without `UnifiedAdvancedPanelControl` but, in this case, you will not have access to multi-window functionalities.
-
-3) Then, install **Task Explorer**. Download these files from [my Github](https://github.com/Baudogit/silverbullet/tree/main/Task%20Explorer):
-
-           TaskExplorer.md (this file)
-           Instructions_for_Task_Explorer.md (filtering and querying rules)
-           taskex_styles.css
-           lucide-icons.svg (icons)
-           where-history.txt (custom clauses where history)
-           where-examples.txt (custom where clauses examples)
-
-     and put them in your SilverBullet space here: “Library/**baudogit**/“
+>   During installation, two text files concerning the custom where clause are placed: one offers examples; the other records a history. A client version of these files is created when Task Explorer is first launched. This version is preserved during subsequent updates.
 
 ## Configuration
 
@@ -204,20 +199,22 @@ config.set("explorer2", {
 })
 ````
 
-## Discussion
+**Discussions (community board)**:
 
-- Task Explorer: https://community.silverbullet.md/t/task-explorer-revisited/3805
+- Task Explorer: https://community.silverbullet.md/t/task-explorer/3805
 - Document Manager https://community.silverbullet.md/t/document-explorer-for-silverbullet/3647/159
+
 See also :
 - Task Manager by Mr.Red: https://community.silverbullet.md/t/todo-task-manager-global-interactive-table-sorter-filtering/3767
+- Kanban integration by dandimrod and Mr.Red: https://community.silverbullet.md/t/kanban-integration-with-tasks/925/20
 
-**Upcoming developments:**
-- Interface: adapt style to dark theme ;
-- List: add sort option ;
+**Upcoming developments**:
+- Interface: in the toolbar, add a sort clear button and replace the two buttons on the page break with a single toggle button ; adapt style to dark theme ; 
 - Filter: when a filter is applied and page break active, count the number of tasks displayed per page ;
 - Queries: add submenus to select itags, tags and/or parents ; modify list of attributes (all in the index rather than in the list) ;
 - Update: add a replace option for value ; calculate the value according to a formula ;
-- Documentation: consolidate the presentation of actions ;
+- Documentation: restructure “Instructions_for_Task_Explorer.md” ;
+- Code: transfer all css to taskex_styles.css ; restructure menu code ;
 - Issues: ...
 
 ---
@@ -293,6 +290,41 @@ js.window.sessionStorage.setItem("searchMode", "list")
 js.window.sessionStorage.setItem("searchInit", "true")
 js.window.sessionStorage.setItem("searchTerm", WHERE_INIT)
 js.window.sessionStorage.setItem("searchTermFilter", "")
+
+-- ---------- INITIALIZE CUSTOM CLAUSE WHERE FILES ----------
+
+local function initializeConfigFile(fileName, initialFileName)
+  local filePath = "Library/baudogit/" .. fileName
+  local initialPath = "Library/baudogit/" .. initialFileName
+  
+  -- Check if target file exists
+  local exists = pcall(function()
+    space.readFile(filePath)
+  end)
+  
+  if not exists then
+    -- Try to read initial file
+    local success, content = pcall(function()
+      return space.readFile(initialPath)
+    end)
+    
+    if success and content then
+      -- Copy initial to target
+      pcall(function()
+        space.writeFile(filePath, content)
+      end)
+    else
+      -- Create empty file
+      pcall(function()
+        space.writeFile(filePath, encoding.utf8Encode(""))
+      end)
+    end
+  end
+end
+
+-- Initialize both config files
+initializeConfigFile("where-examples.txt", "where-examples_initial.txt")
+initializeConfigFile("where-history.txt", "where-history_initial.txt")
 
 ------------------------- HELPER TO UPDATE ATTRIBUTE -----------------------
 -- Pending resolvers and global single listener
@@ -389,7 +421,7 @@ local function toggleTaskRemote(pageName, pos, currentState, statePerso)
     drawPanel("yes")
     triggerHighlightUpdate()
     editor.showProgress()
-  end, 100)   -- an awaitEmptyQueue will be applied just before querying the tasks
+  end, 100) -- an awaitEmptyQueue will be applied just before querying the tasks
 end
 
 -- 2) UPDATE ATTRIBUTE
@@ -475,7 +507,7 @@ local function updateTaskAttributes(taskIds, action, attributeName, newValue)
         end
       end
     end
-    
+
     -- Feedback
     if modifPerPage == 0 then
       js.log("Page: " .. pageName .. " :: no task to update")
@@ -615,8 +647,8 @@ local function drawPanel(seeMess, clauseWhere)
               <div class="explorer-toolbar">
                 <div class="input-wrapper">
                   <input id="tileSearch" title="Filter / Query / Update" placeholder="&nbsp;&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;Please choose Filter, Query or Update" </input>
-                </div> 
-                <div class="mode-switcher">   
+                </div>
+                <div class="mode-switcher">
                     <div id= "searchInfo" title="Instructions for use"]])
   table.insert(h, [[" onclick="syscall('editor.invokeCommand','Open: Instructions')">Instructions]])
   --table.insert(h, ICONS.info)
@@ -708,7 +740,7 @@ local function drawPanel(seeMess, clauseWhere)
   table.insert(h2, addHtml)
   table.insert(h2, "</div>")
   local nbTasks = listVar[2]
-  local lib = " "   -- (nbTasks > 1 and " tasks " or " task ")
+  local lib = " " -- (nbTasks > 1 and " tasks " or " task ")
   local finalHtml = table.concat(h2)
   finalHtml = finalHtml:gsub("<span id='temp%-message3'></span>",
     "<span id='temp-message3'> " .. nbTasks .. lib .. "displayed of " .. nbTasks .. lib .. "extracted</span>")
@@ -1037,6 +1069,28 @@ local function drawPanel(seeMess, clauseWhere)
 
       header.style.display = hasVisibleTasks ? "" : "none";
     });
+
+    // Update feedback message to show both sort and filter if active
+    const container = document.getElementById("explorerGrid");
+    const sortActive = container ? container.getAttribute('data-sort-active') : null;
+    const message = document.getElementById('temp-message3');
+
+    if (message) {
+      let visibleCount = 0;
+      allTasks.forEach(div => {
+        if (div.style.display !== 'none') visibleCount++;
+      });
+
+      if (sortActive && searchTermFilter) {
+        message.textContent = ` ${visibleCount} tasks | Sorted: ${sortActive} | Filter: ${searchTermFilter}`;
+      } else if (sortActive) {
+        message.textContent = ` ${visibleCount} tasks sorted by: ${sortActive}`;
+      } else if (searchTermFilter) {
+        message.textContent = ` ${visibleCount} tasks filtered`;
+      } else {
+        message.textContent = ` ${visibleCount} tasks displayed`;
+      }
+    }
   }
 
   // ============================================
@@ -1225,6 +1279,266 @@ local function drawPanel(seeMess, clauseWhere)
   }
 
   // !!!============================================
+  // SORT FUNCTIONS
+  // ============================================
+
+  /**
+   * Parse sort criteria string into array of sort keys
+   * Example: "deadline- state+" → [{attr: "deadline", desc: true}, {attr: "state", desc: false}]
+   */
+  function parseSortCriteria(criteria) {
+    const parts = criteria.trim().split(/\s+/);
+    const sortKeys = [];
+
+    for (let part of parts) {
+      if (!part) continue;
+
+      const desc = part.endsWith('-');
+      const asc = part.endsWith('+');
+
+      if (!desc && !asc) {
+        // No suffix, default to ascending
+        sortKeys.push({ attr: part, desc: false });
+      } else {
+        const attr = part.slice(0, -1); // Remove last character (+ or -)
+        sortKeys.push({ attr: attr, desc: desc });
+      }
+    }
+
+    return sortKeys;
+  }
+
+  /**
+   * Extract attribute value from a task div
+   * Searches in the HTML for attributes like [deadline: 2024-12-31]
+   */
+  function extractAttributeValue(taskDiv, attrName) {
+    const textContent = taskDiv.textContent || taskDiv.innerText || "";
+
+    const searchStr = '[' + attrName + ':';
+    const startIdx = textContent.indexOf(searchStr);
+
+    if (startIdx === -1) {
+      const dataAttr = taskDiv.getAttribute('data-' + attrName);
+      return dataAttr ? dataAttr.trim() : null;
+    }
+
+    const valueStart = startIdx + searchStr.length;
+    const closingIdx = textContent.indexOf(']', valueStart);
+
+    if (closingIdx === -1) return null;
+
+    // Extract and trim (supprime espaces avant et après)
+    const value = textContent.substring(valueStart, closingIdx).trim();
+    return value || null;
+  }
+
+  /**
+    * Normalize date string to timestamp for consistent comparison
+    * Supports:
+    * - ISO format: YYYY-MM-DD, YYYY-MM-DDTHH:mm:ss
+    * - French format: DD/MM/YYYY, DD-MM-YYYY, DD.MM.YYYY
+    * - US format: MM/DD/YYYY (when day <= 12, ambiguous)
+    * - Timestamps: numbers
+    *
+    * Returns: timestamp (number) or null if invalid
+    */
+  function normalizeDate(dateStr) {
+    if (!dateStr) return null;
+
+    // If already a number (timestamp), return it
+    const asNumber = parseFloat(dateStr);
+    if (!isNaN(asNumber) && asNumber > 1000000000) {
+      return asNumber;
+    }
+
+    // Try standard Date parsing first (handles ISO, US formats)
+    let date = new Date(dateStr);
+    if (!isNaN(date.getTime())) {
+      return date.getTime();
+    }
+
+    // Try to detect and convert DD/MM/YYYY or DD-MM-YYYY or DD.MM.YYYY
+    const europeanMatch = dateStr.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{4})$/);
+    if (europeanMatch) {
+      const part1 = parseInt(europeanMatch[1], 10);
+      const part2 = parseInt(europeanMatch[2], 10);
+      const year = parseInt(europeanMatch[3], 10);
+
+      // If first part > 12, it must be day (DD/MM/YYYY format)
+      if (part1 > 12) {
+        const day = part1;
+        const month = part2;
+        date = new Date(year, month - 1, day);
+        if (!isNaN(date.getTime())) {
+          return date.getTime();
+        }
+      }
+      // If second part > 12, it must be MM/DD/YYYY format
+      else if (part2 > 12) {
+        const month = part1;
+        const day = part2;
+        date = new Date(year, month - 1, day);
+        if (!isNaN(date.getTime())) {
+          return date.getTime();
+        }
+      }
+      // Ambiguous case (both <= 12): assume DD/MM/YYYY (French default)
+      else {
+        const day = part1;
+        const month = part2;
+        date = new Date(year, month - 1, day);
+        if (!isNaN(date.getTime())) {
+          return date.getTime();
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+    * Compare two values for sorting
+    * Handles dates (with normalization), numbers, and text
+    */
+  function compareValues(a, b) {
+    // Handle null/undefined
+    if (a === null || a === undefined) {
+      if (b === null || b === undefined) return 0;
+      return 1; // null values go to the end
+    }
+    if (b === null || b === undefined) return -1;
+
+    // Try to parse as dates (with normalization for multiple formats)
+    const timeA = normalizeDate(a);
+    const timeB = normalizeDate(b);
+
+    if (timeA !== null && timeB !== null) {
+      return timeA - timeB;
+    }
+
+    // If only one is a valid date, the non-date goes to the end
+    if (timeA !== null) return -1;
+    if (timeB !== null) return 1;
+
+    // Try to parse as numbers (for non-date numeric values)
+    const numA = parseFloat(a);
+    const numB = parseFloat(b);
+    if (!isNaN(numA) && !isNaN(numB)) {
+      return numA - numB;
+    }
+
+    // Text comparison (case-insensitive)
+    const strA = String(a).toLowerCase();
+    const strB = String(b).toLowerCase();
+    return strA.localeCompare(strB);
+  }
+
+  /**
+   * Main sort function
+   * Sorts all tasks in the DOM according to the criteria
+   */
+  function applySortToTasks(criteria) {
+    // STEP 0: Show all tasks (clear any active filter)
+    const allTaskDivs = document.querySelectorAll('.sb-TaskExplorer-div-task');
+    allTaskDivs.forEach(div => {
+      div.style.display = ''; // Remove display:none from filter
+    });
+
+    // Clear filter state
+    sessionStorage.setItem("searchTermFilter", "");
+    const filterBtn = document.querySelector('#listMode');
+    if (filterBtn) {
+      filterBtn.title = "Filter mode";
+    }
+
+    // Clear filter input if in sort mode
+    const searchInput = document.getElementById('tileSearch');
+    if (searchInput && searchMode === 'sort') {
+      // Keep the sort criteria, don't clear it
+    }
+
+    // STEP 1: Parse sort criteria
+    const sortKeys = parseSortCriteria(criteria);
+
+    if (sortKeys.length === 0) {
+      console.warn("No valid sort criteria");
+      return;
+    }
+
+    // STEP 2: Get all task divs as array
+    const taskDivs = Array.from(allTaskDivs);
+
+    if (taskDivs.length === 0) {
+      console.warn("No tasks to sort");
+      return;
+    }
+
+    // STEP 3: Extract sort values for each task
+    taskDivs.forEach(div => {
+      div._sortValues = {};
+      sortKeys.forEach(key => {
+        div._sortValues[key.attr] = extractAttributeValue(div, key.attr);
+      });
+    });
+
+    // STEP 4: Sort the array
+    taskDivs.sort((a, b) => {
+      for (let key of sortKeys) {
+        const valA = a._sortValues[key.attr];
+        const valB = b._sortValues[key.attr];
+        const comparison = compareValues(valA, valB);
+
+        if (comparison !== 0) {
+          return key.desc ? -comparison : comparison;
+        }
+      }
+      return 0; // Equal on all keys
+    });
+
+    // STEP 5: Reorder DOM
+    const container = document.getElementById("explorerGrid");
+    if (!container) {
+      console.error("Container #explorerGrid not found");
+      return;
+    }
+
+    // Clear ALL (tasks + page divs)
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
+
+    // Re-append ONLY sorted tasks (page divs discarded)
+    taskDivs.forEach(function(div) {
+      container.appendChild(div);
+    });
+
+    // Clean up temporary sort values
+    taskDivs.forEach(div => {
+      delete div._sortValues;
+    });
+
+    // STEP 6: Mark sort as active and save criteria
+    container.setAttribute('data-sort-active', criteria);
+    sessionStorage.setItem('sortCriteria', criteria);
+
+    // STEP 7: Update feedback message
+    syscall('editor.flashNotification', 'Sorted ' + taskDivs.length + ' tasks by: ' + criteria);
+    console.log(`Sorted ${taskDivs.length} tasks by: ${criteria}`);
+  }
+
+  /**
+   * Clear sort state when switching modes or refreshing
+   */
+  function clearSortState() {
+    const container = document.getElementById("explorerGrid");
+    if (container) {
+      container.removeAttribute('data-sort-active');
+    }
+    sessionStorage.removeItem('sortCriteria');
+  }
+
+  // !!!============================================
   // RECOVERY OF ATTRIBUTES
   // ============================================
   function getUniqueAttributes() {
@@ -1284,8 +1598,8 @@ local function drawPanel(seeMess, clauseWhere)
       overflow-y: auto;
       z-index: 10000;
       display: none;
-      min-width: 200px;
-      max-width: 200px;
+      min-width: 265px;
+      max-width: 265px;
     `;
 
     document.body.appendChild(menu);
@@ -1399,7 +1713,11 @@ local function drawPanel(seeMess, clauseWhere)
         } else if (type === "attribute_update") {
           // For update mode, just insert the attribute name
           searchInput.value = currentValue + item;
-        }
+          } else if (type === "attribute_sort") {
+            // For sort mode, add attribute with + suffix
+            const prefix = currentValue && !currentValue.endsWith(" ") ? " " : "";
+            searchInput.value = currentValue + prefix + item + "+";
+          }
 
         // Keep the menu open and return the focus
         searchInput.focus();
@@ -1440,15 +1758,15 @@ local function drawPanel(seeMess, clauseWhere)
       gap: 6px;
     `;
     modeTitle.classList = "mode-switcher";
-    
+
     // Filter button (active)
     const filterBtn = document.createElement("button");
     filterBtn.id = "listMode";
     filterBtn.textContent = "Filter";
     filterBtn.style.cssText = `
       padding: 4px 12px;
-      border: 1px solid #28a745;
-      background-color: #28a745;
+      border: 1px solid #AA00AA;
+      background-color: #AA00AA;
       color: white;
       border-radius: 3px;
       cursor: pointer;
@@ -1461,7 +1779,7 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("list", searchInput);
     };
-    
+
     // Query button (inactive)
     const queryBtn = document.createElement("button");
     queryBtn.id = "whereMode";
@@ -1482,7 +1800,7 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("where", searchInput);
     };
-    
+
     // Update button (inactive)
     const updateBtn = document.createElement("button");
     updateBtn.id = "updateMode";
@@ -1503,15 +1821,37 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("update", searchInput);
     };
-    
+
+    // Sort button (inactive)
+    const sortBtn = document.createElement("button");
+    sortBtn.id = "sortMode";
+    sortBtn.textContent = "Sort";
+    sortBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    sortBtn.classList='mode-switcher';
+    sortBtn.title = "Sort mode";
+    sortBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("sort", searchInput);
+    };
+
     modeTitle.appendChild(filterBtn);
     modeTitle.appendChild(queryBtn);
     modeTitle.appendChild(updateBtn);
+    modeTitle.appendChild(sortBtn);
     menu.appendChild(modeTitle);
 
     // Item Attributes with submenu
     const attributesItem = document.createElement("div");
-    attributesItem.textContent = "Attributs >";
+    attributesItem.textContent = "Attributes >";
     attributesItem.style.cssText = `
       padding: 6px 12px;
       cursor: pointer;
@@ -1538,7 +1878,7 @@ local function drawPanel(seeMess, clauseWhere)
     const rect = searchInput.getBoundingClientRect();
     menu.style.left = rect.left + "px";
     menu.style.top = rect.bottom + 2 + "px";
-    menu.style.width = rect.width / 2 + "px";
+    menu.style.width = rect.width * 0.65 + "px";
     if (hideMenu === "true") {
       menu.style.display = "none";
     } else {
@@ -1568,7 +1908,7 @@ local function drawPanel(seeMess, clauseWhere)
       gap: 6px;
     `;
     modeTitle.classList = "mode-switcher";
-    
+
     // Filter button (inactive)
     const filterBtn = document.createElement("button");
     filterBtn.id = "listMode";
@@ -1589,7 +1929,7 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("list", searchInput);
     };
-    
+
     // Query button (active)
     const queryBtn = document.createElement("button");
     queryBtn.id = "whereMode";
@@ -1610,7 +1950,7 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("where", searchInput);
     };
-    
+
     // Update button (inactive)
     const updateBtn = document.createElement("button");
     updateBtn.id = "updateMode";
@@ -1631,15 +1971,37 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("update", searchInput);
     };
-    
+
+    // Sort button (inactive)
+    const sortBtn = document.createElement("button");
+    sortBtn.id = "sortMode";
+    sortBtn.textContent = "Sort";
+    sortBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    sortBtn.classList='mode-switcher';
+    sortBtn.title = "Sort mode";
+    sortBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("sort", searchInput);
+    };
+
     modeTitle.appendChild(filterBtn);
     modeTitle.appendChild(queryBtn);
     modeTitle.appendChild(updateBtn);
+    modeTitle.appendChild(sortBtn);
     menu.appendChild(modeTitle);
 
     // Item Attributes
     const attributesItem = document.createElement("div");
-    attributesItem.textContent = "Attributs >";
+    attributesItem.textContent = "Attributes >";
     attributesItem.style.cssText = `
       padding: 6px 12px;
       cursor: pointer;
@@ -1664,7 +2026,7 @@ local function drawPanel(seeMess, clauseWhere)
 
     // Item Properties
     const propItem = document.createElement("div");
-    propItem.textContent = "Propriétés >";
+    propItem.textContent = "Properties >";
     propItem.style.cssText = `
       padding: 6px 12px;
       cursor: pointer;
@@ -1690,8 +2052,8 @@ local function drawPanel(seeMess, clauseWhere)
       background-color: #ccc;
       margin: 4px 0;
     `;
-    menu.appendChild(separator);  
-  
+    menu.appendChild(separator);
+
     // Item History
     const historyItem = document.createElement("div");
     historyItem.textContent = "History >";
@@ -1704,6 +2066,11 @@ local function drawPanel(seeMess, clauseWhere)
 
     historyItem.addEventListener("mouseenter", function () {
       this.style.backgroundColor = "#f0f0f0";
+      if (history.length === 0) {
+        showSubMenu(this, ["No history yet"], "none", searchInput);
+      } else {
+        showSubMenu(this, history, "history", searchInput);
+      }
       showSubMenu(this, history, "history", searchInput);
     });
 
@@ -1715,7 +2082,7 @@ local function drawPanel(seeMess, clauseWhere)
 
       // Item Examples
     const exampleItem = document.createElement("div");
-    exampleItem.textContent = "Exemples >";
+    exampleItem.textContent = "Examples >";
     exampleItem.style.cssText = `
       padding: 6px 12px;
       cursor: pointer;
@@ -1726,6 +2093,11 @@ local function drawPanel(seeMess, clauseWhere)
     exampleItem.addEventListener("mouseenter", function () {
       this.style.backgroundColor = "#f0f0f0";
       showSubMenu(this, examples, "example", searchInput);
+      if (examples.length === 0) {
+        showSubMenu(this, ["No examples available"], "none", searchInput);
+      } else {
+        showSubMenu(this, examples, "example", searchInput);
+      }
     });
 
     exampleItem.addEventListener("mouseleave", function () {
@@ -1738,7 +2110,7 @@ local function drawPanel(seeMess, clauseWhere)
     const rect = searchInput.getBoundingClientRect();
     menu.style.left = rect.left + "px";
     menu.style.top = rect.bottom + 2 + "px";
-    menu.style.width = rect.width / 2 + "px";
+    menu.style.width = rect.width * 0.65 + "px";
     if (hideMenu === "true") {
       menu.style.display = "none";
     } else {
@@ -1768,7 +2140,7 @@ local function drawPanel(seeMess, clauseWhere)
       gap: 6px;
     `;
     modeTitle.classList = "mode-switcher";
-    
+
     // Filter button (inactive)
     const filterBtn = document.createElement("button");
     filterBtn.id = "listMode";
@@ -1789,7 +2161,7 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("list", searchInput);
     };
-    
+
     // Query button (inactive)
     const queryBtn = document.createElement("button");
     queryBtn.id = "whereMode";
@@ -1810,7 +2182,7 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("where", searchInput);
     };
-    
+
     // Update button (active)
     const updateBtn = document.createElement("button");
     updateBtn.id = "updateMode";
@@ -1831,15 +2203,37 @@ local function drawPanel(seeMess, clauseWhere)
       e.stopPropagation();
       window.switchSearchMode("update", searchInput);
     };
-    
+
+    // Sort button (inactive)
+    const sortBtn = document.createElement("button");
+    sortBtn.id = "sortMode";
+    sortBtn.textContent = "Sort";
+    sortBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    sortBtn.classList='mode-switcher';
+    sortBtn.title = "Sort mode";
+    sortBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("sort", searchInput);
+    };
+
     modeTitle.appendChild(filterBtn);
     modeTitle.appendChild(queryBtn);
     modeTitle.appendChild(updateBtn);
+    modeTitle.appendChild(sortBtn);
     menu.appendChild(modeTitle);
 
     // Item Attributes with submenu
     const attributesItem = document.createElement("div");
-    attributesItem.textContent = "Attributs >";
+    attributesItem.textContent = "Attributes >";
     attributesItem.style.cssText = `
       padding: 6px 12px;
       cursor: pointer;
@@ -1850,6 +2244,157 @@ local function drawPanel(seeMess, clauseWhere)
     attributesItem.addEventListener("mouseenter", function () {
       this.style.backgroundColor = "#f0f0f0";
       showSubMenu(this, attributes, "attribute_update", searchInput);
+    });
+
+    attributesItem.addEventListener("mouseleave", function () {
+      this.style.backgroundColor = "";
+    });
+
+    menu.appendChild(attributesItem);
+
+    // Position and display the menu
+    const rect = searchInput.getBoundingClientRect();
+    menu.style.left = rect.left + "px";
+    menu.style.top = rect.bottom + 2 + "px";
+    menu.style.width = rect.width * 0.65 + "px";
+    if (hideMenu === "true") {
+      menu.style.display = "none";
+    } else {
+      menu.style.display = "block";
+    }
+  }
+
+
+  // !!!============================================
+  // SORT MENU
+  // ============================================
+
+  function showSortModeMenu(searchInput, hideMenu, postitBtn) {
+    const menu =
+      document.getElementById("attributeDropdownMenu") || createAttributeMenu();
+    const attributes = getUniqueAttributes();
+
+    // Clear menu
+    menu.innerHTML = "";
+
+    // Title with 4 mode buttons
+    const modeTitle = document.createElement("div");
+    modeTitle.style.cssText = `
+      padding: 6px 8px;
+      background-color: #f5f5f5;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      gap: 6px;
+    `;
+    modeTitle.classList = "mode-switcher";
+
+    // Filter button (inactive)
+    const filterBtn = document.createElement("button");
+    filterBtn.id = "listMode";
+    filterBtn.textContent = "Filter";
+    filterBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    filterBtn.classList='mode-switcher';
+    filterBtn.title = "Filter mode";
+    filterBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("list", searchInput);
+    };
+
+    // Query button (inactive)
+    const queryBtn = document.createElement("button");
+    queryBtn.id = "whereMode";
+    queryBtn.textContent = "Query";
+    queryBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    queryBtn.classList='mode-switcher';
+    queryBtn.title = sessionStorage.getItem("searchTerm") || "Query mode";
+    queryBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("where", searchInput);
+    };
+
+    // Update button (inactive)
+    const updateBtn = document.createElement("button");
+    updateBtn.id = "updateMode";
+    updateBtn.textContent = "Update";
+    updateBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      background-color: white;
+      color: #333;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+    `;
+    updateBtn.classList='mode-switcher';
+    updateBtn.title = "Update mode";
+    updateBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("update", searchInput);
+    };
+
+    // Sort button (active)
+    const sortBtn = document.createElement("button");
+    sortBtn.id = "sortMode";
+    sortBtn.textContent = "Sort";
+    sortBtn.style.cssText = `
+      padding: 4px 12px;
+      border: 1px solid #4caf50;
+      background-color: #4caf50;
+      color: white;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    `;
+    sortBtn.classList='mode-switcher';
+    sortBtn.title = postitBtn || "Sort mode";
+    sortBtn.onclick = function(e) {
+      e.stopPropagation();
+      window.switchSearchMode("sort", searchInput);
+    };
+
+    modeTitle.appendChild(filterBtn);
+    modeTitle.appendChild(queryBtn);
+    modeTitle.appendChild(updateBtn);
+    modeTitle.appendChild(sortBtn);
+    menu.appendChild(modeTitle);
+
+    // Item Attributes with submenu for sorting
+    const attributesItem = document.createElement("div");
+    attributesItem.textContent = "Attributes >";
+    attributesItem.style.cssText = `
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      color: blue;
+    `;
+
+    attributesItem.addEventListener("mouseenter", function () {
+      this.style.backgroundColor = "#f0f0f0";
+      if (attributes.length === 0) {
+        showSubMenu(this, ["Aucun attribut trouvé"], "none", searchInput);
+      } else {
+        showSubMenu(this, attributes, "attribute_sort", searchInput);
+      }
     });
 
     attributesItem.addEventListener("mouseleave", function () {
@@ -1881,6 +2426,8 @@ local function drawPanel(seeMess, clauseWhere)
       showWhereModeMenu(searchInput, hideMenu, postitBtn);
     } else if (searchMode === "update") {
       showUpdateModeMenu(searchInput, hideMenu, postitBtn);
+    } else if (searchMode === "sort") {
+      showSortModeMenu(searchInput, hideMenu, postitBtn);
     }
   }
 
@@ -1918,7 +2465,7 @@ local function drawPanel(seeMess, clauseWhere)
       const btn = document.querySelector('#whereMode');
       btn.classList.add('active');
       postitBtn = "Where : " + sessionStorage.getItem("searchTerm");
-      inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 custom clause where (Enter to execute)";
+      inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 custom clause where (Enter to query)";
       searchInput.style.backgroundColor = "#F2F7FF";
     } else if (mode === "update") {
       searchInput.value = "";
@@ -1928,7 +2475,18 @@ local function drawPanel(seeMess, clauseWhere)
       postitBtn = "Update attribute";
       inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 add:name[=value] | delete:name | rename:old->new (Enter to execute)";
       searchInput.style.backgroundColor = "#FFF8E1";
-    }
+      } else if (mode === "sort") {
+        // Force mode list first
+        //syscall('editor.invokeCommand','TaskExplorer: Change View Mode',{mode:'list'});
+
+        searchInput.value = "";
+        sessionStorage.setItem("searchMode", "sort");
+        const btn = document.querySelector('#sortMode');
+        btn.classList.add('active');
+        postitBtn = "Sort mode";
+        inputSearchZone.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 attribute1+|- attribute2+|- (Enter to sort)";
+        searchInput.style.backgroundColor = "#E8F5E9";
+      }
 
     // Give focus to the search field
     searchInput.focus();
@@ -2039,6 +2597,12 @@ local function drawPanel(seeMess, clauseWhere)
           const command = this.value.trim();
           if (command) {
             executeAttributeUpdate(command);
+          }
+        } else if (searchMode === "sort") {
+          // In sort mode, execute the sort
+          const sortCriteria = this.value.trim();
+          if (sortCriteria) {
+            applySortToTasks(sortCriteria);
           }
         }
       } else if (e.key === "Escape") {
@@ -2306,6 +2870,11 @@ local function drawPanel(seeMess, clauseWhere)
       btn.classList.add('active');
       inputSearch.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 add:name[=value] | delete:name | rename:old->new (Enter to execute)";
       searchInput.style.backgroundColor = "#FFF8E1";
+    } else if (searchModeEnCours === "sort") {
+      const btn = document.querySelector('#sortMode');
+      btn.classList.add('active');
+      inputSearch.placeholder = "\u00A0\u00A0\u00A0\u00A0...\u00A0\u00A0 attr1+/- attr2+/- (Enter to sort)";
+      searchInput.style.backgroundColor = "#E8F5E9";
     }
 })();
 

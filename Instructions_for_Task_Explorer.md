@@ -4,16 +4,19 @@ type: "documentation"
 subject: "How to set up filters and custom where clauses"
 files:
 - Instructions_for_Task_Explorer.md
-maj : 2026-02-11 08-00
+maj : 2026-02-12 12-00
 ---
 
 ---
+
+> **warning** Warning
+>   This document will be restructured soon !
 
 # The input action box
 
-To access the actions, please **click on the input box**. There are three types of actions :
+To access the actions, please **click on the input box**:
 
-![actions|500px](https://raw.githubusercontent.com/Baudogit/silverbullet/refs/heads/main/screenshots/actions.png)
+![actions|800px](https://raw.githubusercontent.com/Baudogit/silverbullet/refs/heads/main/screenshots/actions.png)
 These menus can be hidden by pressing **Esc** or click out of the input.
 To make them appear again without leaving the input area, **right-click**.
 

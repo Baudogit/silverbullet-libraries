@@ -1,6 +1,6 @@
-"25 | _.attrib2 == '2025-12-27'",
+"25 | (_.range[2] - _.range[1]) > 100 and _.done == true",
 "24 | _.page.match('^Acc')",
-"23 | (_.range[2] - _.range[1]) > 100 and _.done == true",
+"23 | _.attrib2 == '2025-12-27'",
 "22 | (_.range[2] - _.range[1]) > 100) and _.done == true",
 "21 | (_.range[2] - _.range[1]) > 100) and _done. == true",
 "20 | (_.range[2] - _.range[1]) > 100 and _done.=true",
