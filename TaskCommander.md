@@ -722,7 +722,7 @@ local function drawPanel(seeMess, clauseWhere)
   table.insert(h, (allTasks and "active" or ""))
   table.insert(h, [[" id="tree-toggle-btn"
                         style="display: ]])
-  table.insert(h, (viewMode == "list"))
+  table.insert(h, "block") --(viewMode == "list") booleen not allowed
   table.insert(h, [[" onclick="syscall('lua.evalExpression', 'toggleQueryButton()')">
                         <span id="tree-toggle-icon">]])
   if allTasks then
