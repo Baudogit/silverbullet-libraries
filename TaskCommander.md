@@ -186,13 +186,16 @@ body.attr-alt-display .sb-attribute {
   color: black;
   border: 1px solid orange !important ;
 }
-body.attr-alt-display .sb-attribute> .sb-list.sb-frontmatter.sb-meta {
+/*body.attr-alt-display .sb-attribute> .sb-list.sb-frontmatter.sb-meta {*/
+body.attr-alt-display .sb-attribute> .sb-frontmatter.sb-meta {
     display: inline !important;
 }
-body.attr-alt-display .sb-attribute> .sb-list.sb-frontmatter.sb-attribute-name {
+/*body.attr-alt-display .sb-attribute> .sb-list.sb-frontmatter.sb-attribute-name {*/
+body.attr-alt-display .sb-attribute> .sb-frontmatter.sb-attribute-name {
     display: inline !important;
 }
-body.attr-alt-display .sb-attribute> .sb-list.sb-frontmatter.sb-attribute-value {
+/*body.attr-alt-display .sb-attribute> .sb-list.sb-frontmatter.sb-attribute-value {*/
+body.attr-alt-display .sb-attribute> .sb-frontmatter.sb-attribute-value {
     display: inline !important;
 }
 ```
@@ -442,6 +445,10 @@ local function toggleTaskRemote(pageName, pos, currentState, statePerso)
 end
 
 -- 2) UPDATE ATTRIBUTE
+-- Escape Lua pattern magic 12 characters for safe concatenation into patterns
+local function escapePattern(s)
+  return (s:gsub("([%(%)%.%%%+%-%*%?%[%]%^%$])", "%%%1"))
+end
 
 -- 2.1) Modify task line
 local function modifyTaskLine(content, pos, action, attrName, newValue)
@@ -449,9 +456,10 @@ local function modifyTaskLine(content, pos, action, attrName, newValue)
   local originalLine = content:sub(pos + 1, lineEnd - 1)
   local newLine = originalLine
   local modified = false
+  local safeAttrName = escapePattern(attrName)
 
   if action == "add" then
-    local pattern = "%[" .. attrName .. ":%s*[^%]]*%]"
+    local pattern = "%[" .. safeAttrName .. ":%s*[^%]]*%]"
     if originalLine:match(pattern) then
       modified = false
     else
@@ -463,10 +471,10 @@ local function modifyTaskLine(content, pos, action, attrName, newValue)
       modified = true
     end
   elseif action == "delete" then
-    newLine = originalLine:gsub("%s*%[" .. attrName .. ":%s*[^%]]+%]", "")
+    newLine = originalLine:gsub("%s*%[" .. safeAttrName .. ":%s*[^%]]+%]", "")
     modified = (newLine ~= originalLine)
   elseif action == "rename" then
-    newLine = originalLine:gsub("%[" .. attrName .. ":", "[" .. newValue .. ":")
+    newLine = originalLine:gsub("%[" .. safeAttrName .. ":", "[" .. newValue .. ":")
     modified = (newLine ~= originalLine)
   end
 
